@@ -1,10 +1,13 @@
 package com.example.Pedido_miku_food.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -12,11 +15,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "pedido")
 @Entity
+@Getter
 public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id_pedido;
 
     @Column(nullable = false)
     private Date fecha_pedido;
@@ -31,8 +35,9 @@ public class Pedido {
     private String direccion;
 
     @Column(nullable = false)
-    private Long id_cliente;
+    private Long idUsuario;
 
-    @Column(nullable = false)
-    private Long id_detalle;
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetallePedido> detalles = new ArrayList<>();
+
 }

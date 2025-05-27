@@ -1,6 +1,7 @@
 package com.example.Pedido_miku_food.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,21 @@ public class PedidoService {
         return pedidoRepository.findAll();
     }
 
+    public Optional<Pedido> buscarXid(Long idPedido){
+        return pedidoRepository.findById(idPedido);
+    }
+
     public Pedido agregarPedido(Pedido nuevoPedido){
         return pedidoRepository.save(nuevoPedido);
     }
+
+    public void eliminarPedido(Long idPedido){
+        pedidoRepository.deleteById(idPedido);
+    }
+    
+    public List<Pedido> buscarXUser(Long idUser){
+        return pedidoRepository.findById_usuario(idUser);
+    }
+
+
 }
