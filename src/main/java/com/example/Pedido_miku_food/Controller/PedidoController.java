@@ -1,6 +1,5 @@
 package com.example.Pedido_miku_food.Controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.Pedido_miku_food.Service.PedidoService;
 import com.example.Pedido_miku_food.model.Pedido;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,8 +28,12 @@ public class PedidoController {
     private PedidoService pedidoService;
 
     @GetMapping()
-    public List<Pedido> listar(){
-        return pedidoService.listarPedidos();
+    public ResponseEntity<List<Pedido>> listar(){
+        List<Pedido> listaped=pedidoService.listarPedidos();
+        if (listaped.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(listaped);
     }
     @PostMapping("agregar")
     public Pedido agregarPedido(@RequestBody Pedido newpedido) {
@@ -57,13 +61,15 @@ public class PedidoController {
 
         @PutMapping("/actualizar/{id}")
     public ResponseEntity<Pedido> actualizar(@PathVariable Long id, @RequestBody Pedido pedido) {
+        Optional<Pedido> pedOptional = pedidoService.buscarXid(id);
+        
         try {
-            Optional<Pedido> ped = pedidoService.buscarXid(id);
-            ped.setId(pedido.getId());
-            ped.setEstado(pedido.getEstado());
+            Pedido ped =pedOptional.get();
+            ped.setDireccion(pedido.getDireccion());
+            ped.setTipoEntrega(pedido.getTipoEntrega());
             ped.setFecha_pedido(pedido.getFecha_pedido());
-            ped.setId(pedido.getId());
-            ped.setId_usuario(pedido.getId_usuario());
+            ped.setTipoEntrega(pedido.getTipoEntrega());
+            ped.setDetalles(pedido.getDetalles());
 
             pedidoService.agregarPedido(ped);
             return ResponseEntity.ok(pedido);
@@ -71,7 +77,17 @@ public class PedidoController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
+    @DeleteMapping("/eliminar/{id}")
+     public ResponseEntity<String> eliminarped(@PathVariable Long id) {
+        
+        try {
+            pedidoService.eliminarPedido(id);
+            return ResponseEntity.ok("Pedido Eliminado");  
+        } catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
+    }
     
 
 }
