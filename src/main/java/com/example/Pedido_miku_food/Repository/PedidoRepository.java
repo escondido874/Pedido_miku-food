@@ -13,7 +13,7 @@ public interface PedidoRepository extends JpaRepository<Pedido,Long>{
 
 
     //Obtener pedidos segun usuario
-    @Query(value = "SELECT * FROM pedido WHERE idUsuario = :idUsuario", nativeQuery = true)
-    List<Pedido> findById_usuario(Long idUsuario);
+    @Query(value = "SELECT * FROM pedido WHERE v_idUsuario = :idUsuario", nativeQuery = true)
+    List<Pedido> findById_usuario(Long v_idUsuario);
 
 }

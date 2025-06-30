@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.Pedido_miku_food.PTO.PedidoPTO;
 import com.example.Pedido_miku_food.Service.PedidoService;
 import com.example.Pedido_miku_food.model.Pedido;
 
@@ -28,13 +29,14 @@ public class PedidoController {
     private PedidoService pedidoService;
 
     @GetMapping()
-    public ResponseEntity<List<Pedido>> listar(){
-        List<Pedido> listaped=pedidoService.listarPedidos();
+    public ResponseEntity<List<PedidoPTO>> listar(){
+        List<PedidoPTO> listaped=pedidoService.listarPedidos();
         if (listaped.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(listaped);
     }
+
     @PostMapping("agregar")
     public Pedido agregarPedido(@RequestBody Pedido newpedido) {
         return pedidoService.agregarPedido(newpedido);
@@ -88,6 +90,8 @@ public class PedidoController {
             return ResponseEntity.notFound().build();
         }
     }
+    
+
     
 
 }

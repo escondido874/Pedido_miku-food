@@ -6,9 +6,11 @@ import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @NoArgsConstructor
@@ -16,6 +18,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "pedido")
 @Entity
 @Getter
+@Setter
+@Builder
 public class Pedido {
 
     @Id
