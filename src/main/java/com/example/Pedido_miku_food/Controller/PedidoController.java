@@ -51,8 +51,12 @@ public class PedidoController {
     @Operation(summary = "Agregar un nuevo pedido", description = "Crea un nuevo pedido en el sistema de Miku-Food")
     @Schema(description = "Pedido a agregar", implementation = Pedido.class)
     @ApiResponse(responseCode = "201", description = "Pedido creado exitosamente")
-    public Pedido agregarPedido(@RequestBody Pedido newpedido) {
-        return pedidoService.agregarPedido(newpedido);
+    public ResponseEntity<?> agregarPedido(@RequestBody Pedido newpedido) {
+        if (!validarPedido(newpedido)) {
+            return ResponseEntity.badRequest().body("Datos de pedido inválidos");
+        }
+        Pedido pedidoGuardado = pedidoService.agregarPedido(newpedido);
+        return ResponseEntity.status(201).body(pedidoGuardado);
     }
     
     @GetMapping("/buscarid/{id}")
@@ -84,11 +88,13 @@ public class PedidoController {
     @Operation(summary = "Actualizar un pedido", description = "Actualiza un pedido existente en el sistema de Miku-Food")
     @ApiResponse(responseCode = "200", description = "Pedido actualizado exitosamente")
     @ApiResponse(responseCode = "404", description = "Pedido no encontrado")
-    public ResponseEntity<Pedido> actualizar(@PathVariable Long id, @RequestBody Pedido pedido) {
+    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody Pedido pedido) {
+        if (!validarPedido(pedido)) {
+            return ResponseEntity.badRequest().body("Datos de pedido inválidos");
+        }
         Optional<Pedido> pedOptional = pedidoService.buscarXid(id);
-        
         try {
-            Pedido ped =pedOptional.get();
+            Pedido ped = pedOptional.get();
             ped.setDireccion(pedido.getDireccion());
             ped.setTipoEntrega(pedido.getTipoEntrega());
             ped.setFecha_pedido(pedido.getFecha_pedido());
@@ -117,6 +123,36 @@ public class PedidoController {
     }
     
 
+    private boolean validarPedido(Pedido pedido){
+        // Valida que los campos principales del pedido no sean nulos
+        if (pedido == null) {
+            return false;
+        }
+        // Si el tipo de entrega es 1 (por ejemplo, retiro en local), la dirección puede ser nula o vacía
+        if (pedido.getTipoEntrega() == 1) {
+            // No se valida dirección
+        } else if (pedido.getTipoEntrega() == 2) {
+            // Si el tipo de entrega es 2 (por ejemplo, envío a domicilio), la dirección es obligatoria
+            if (pedido.getDireccion() == null || pedido.getDireccion().trim().isEmpty()) {
+                return false;
+            }
+        } else {
+            // Si el tipo de entrega no es 1 ni 2, no es válido
+            return false;
+        }
+        if (pedido.getFecha_pedido() == null) {
+            return false;
+        }
+        if (pedido.getIdUsuario() == null) {
+            return false;
+        }
+        // El campo total es tipo primitivo double, así que solo validamos que sea mayor o igual a 0
+        if (pedido.getTotal() < 0) {
+            return false;
+        }
+        // Puedes agregar más validaciones según los campos requeridos
+        return true;
+    }
     
 
 }
