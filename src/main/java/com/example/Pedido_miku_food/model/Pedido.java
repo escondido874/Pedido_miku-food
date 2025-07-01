@@ -12,14 +12,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Getter
+@Setter
+@Builder
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "pedido")
 @Entity
-@Getter
-@Setter
-@Builder
 public class Pedido {
 
     @Id
