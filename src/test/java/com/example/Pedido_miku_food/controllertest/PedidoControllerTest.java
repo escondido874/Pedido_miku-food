@@ -74,7 +74,9 @@ public class PedidoControllerTest {
     @Test
     void testAgregarPedido() {
         when(pedidoService.agregarPedido(any(Pedido.class))).thenReturn(pedido); 
-        Pedido resultado = pedidoController.agregarPedido(pedido); 
+        ResponseEntity<?> respuesta = pedidoController.agregarPedido(pedido); 
+        assertEquals(HttpStatus.CREATED, respuesta.getStatusCode());
+        Pedido resultado = (Pedido) respuesta.getBody();
         assertNotNull(resultado); 
         assertEquals(pedido.getId_pedido(), resultado.getId_pedido()); 
         verify(pedidoService, times(1)).agregarPedido(any(Pedido.class)); 
@@ -105,11 +107,16 @@ public class PedidoControllerTest {
     void testActualizarPedido_Existente() {
         Pedido pedidoActualizado = new Pedido();
         pedidoActualizado.setDireccion("Nueva Dirección 456");
+        pedidoActualizado.setTipoEntrega(1); // Valor válido
+        pedidoActualizado.setFecha_pedido(new Date()); // No nulo
+        pedidoActualizado.setIdUsuario(1L); // No nulo
+        pedidoActualizado.setTotal(100.0); // Mayor o igual a 0
         when(pedidoService.buscarXid(1L)).thenReturn(Optional.of(pedido)); 
         when(pedidoService.agregarPedido(any(Pedido.class))).thenReturn(pedidoActualizado); 
-        ResponseEntity<Pedido> respuesta = pedidoController.actualizar(1L, pedidoActualizado); 
+        ResponseEntity<?> respuesta = pedidoController.actualizar(1L, pedidoActualizado); 
         assertEquals(HttpStatus.OK, respuesta.getStatusCode()); 
-        assertEquals("Nueva Dirección 456", respuesta.getBody().getDireccion()); 
+        Pedido resultado = (Pedido) respuesta.getBody();
+        assertEquals("Nueva Dirección 456", resultado.getDireccion()); 
     }
 
     // Test para eliminar un pedido existente

@@ -128,11 +128,11 @@ public class PedidoController {
         if (pedido == null) {
             return false;
         }
-        // Si el tipo de entrega es 1 (por ejemplo, retiro en local), la dirección puede ser nula o vacía
+        // Si el tipo de entrega es 1 (retiro en local), la dirección puede ser nula o vacía
         if (pedido.getTipoEntrega() == 1) {
             // No se valida dirección
         } else if (pedido.getTipoEntrega() == 2) {
-            // Si el tipo de entrega es 2 (por ejemplo, envío a domicilio), la dirección es obligatoria
+            // Si el tipo de entrega es 2 (envío a domicilio), la dirección es obligatoria
             if (pedido.getDireccion() == null || pedido.getDireccion().trim().isEmpty()) {
                 return false;
             }
@@ -146,11 +146,11 @@ public class PedidoController {
         if (pedido.getIdUsuario() == null) {
             return false;
         }
-        // El campo total es tipo primitivo double, así que solo validamos que sea mayor o igual a 0
+       
         if (pedido.getTotal() < 0) {
             return false;
         }
-        // Puedes agregar más validaciones según los campos requeridos
+        
         return true;
     }
     
