@@ -108,9 +108,9 @@ public class PedidoControllerTest {
         Pedido pedidoActualizado = new Pedido();
         pedidoActualizado.setDireccion("Nueva Dirección 456");
         pedidoActualizado.setTipoEntrega(1); // Valor válido
-        pedidoActualizado.setFecha_pedido(new Date()); // No nulo
-        pedidoActualizado.setIdUsuario(1L); // No nulo
-        pedidoActualizado.setTotal(100.0); // Mayor o igual a 0
+        pedidoActualizado.setFecha_pedido(new Date());
+        pedidoActualizado.setIdUsuario(1L);
+        pedidoActualizado.setTotal(100.0);
         when(pedidoService.buscarXid(1L)).thenReturn(Optional.of(pedido)); 
         when(pedidoService.agregarPedido(any(Pedido.class))).thenReturn(pedidoActualizado); 
         ResponseEntity<?> respuesta = pedidoController.actualizar(1L, pedidoActualizado); 
