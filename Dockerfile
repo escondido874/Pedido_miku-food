@@ -2,7 +2,7 @@ FROM openjdk:19-jdk AS build
 WORKDIR /app
 
 COPY pom.xml .
-COPY src src
+COPY src src 
 COPY mvnw .
 COPY .mvn .mvn
 

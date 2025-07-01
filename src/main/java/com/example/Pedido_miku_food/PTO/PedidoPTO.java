@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 public class PedidoPTO {
 
     private Long id_pedido;
-
    
     private Date fecha_pedido;
 
