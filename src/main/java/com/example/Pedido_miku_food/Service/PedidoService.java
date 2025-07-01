@@ -23,6 +23,7 @@ public class PedidoService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
+    // Lista todos los pedidos y los transforma a PedidoPTO
     public List<PedidoPTO> listarPedidos(){
         List<Pedido> pedidos = pedidoRepository.findAll();
         List<PedidoPTO> pedpto= new ArrayList<>();
@@ -49,18 +50,22 @@ public class PedidoService {
         return pedpto;
     }
 
+    // Busca un pedido por su ID
     public Optional<Pedido> buscarXid(Long idPedido){
         return pedidoRepository.findById(idPedido);
     }
 
+    // Guarda un nuevo pedido
     public Pedido agregarPedido(Pedido nuevoPedido){
         return pedidoRepository.save(nuevoPedido);
     }
 
+    // Elimina un pedido por su ID
     public void eliminarPedido(Long idPedido){
         pedidoRepository.deleteById(idPedido);
     }
     
+    // Busca pedidos por usuario
     public List<Pedido> buscarXUser(Long idUser){
         return pedidoRepository.findById_usuario(idUser);
     }
